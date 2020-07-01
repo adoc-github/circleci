@@ -4,7 +4,7 @@ jobs:
       - image: 'circleci/ruby:2.4.1'
     steps:
       - colony/start-sandbox:
-          artifacts: '{''}'
+          artifacts: "{}"
           blueprint: 'wordpress_aws_sample_Tokyo'
           inputs: "{'DB_USER': 'root', 'DB_PASS': '1234', 'DB_NAME': 'wordpress_demo', 'AWS_Type': 't2.micro'}"
           sandbox-name: 'test-sandbox'
