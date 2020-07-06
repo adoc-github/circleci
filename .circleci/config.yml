@@ -7,7 +7,7 @@ jobs:
           artifacts: "{}"
           blueprint: 'wordpress_aws_sample_Tokyo'
           inputs: "{'DB_USER': 'root', 'DB_PASS': '1234', 'DB_NAME': 'wordpress_demo', 'AWS_Type': 't2.micro'}"
-          sandbox-name: 'test-sandbox'
+          sandbox-name: 'demo-sandbox'
       - run:
           command: 'echo "Sandbox ID is ${SANDBOX_ID}"'
           name: Fetch Details
