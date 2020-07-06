@@ -1,1 +1,22 @@
-
+jobs:
+  build-and-publish:
+    docker:
+      - image: 'circleci/ruby:2.4.1'
+    steps:
+      - checkout
+      - run:
+          command: |
+            mkdir -p workspace
+            tar -zcf wordpress-5.3.3.tar.gz -C my_app/ .
+          name: Archive app
+      - aws-s3/copy:
+          from: wordpress-5.3.3.tar.gz
+          to: 's3://colony-repository/latest/'
+orbs:
+  aws-s3: circleci/aws-s3@1.0.11
+  colony: quali/cloudshell-colony@1.0
+version: 2.1
+workflows:
+  leadeasy:
+    jobs:
+      - build-and-publish
