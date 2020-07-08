@@ -6,7 +6,7 @@ jobs:
       - checkout
       - run:
           command: |
-            mv wordpress-5.4.1.tar.gz wordpress-latest.tar.gz
+            mv ./app/wordpress-5.4.1.tar.gz wordpress-latest.tar.gz
           name: Archive app
       - aws-s3/copy:
           from: wordpress-latest.tar.gz
