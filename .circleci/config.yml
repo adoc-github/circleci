@@ -1,22 +1,41 @@
 jobs:
-  build:
+  build-and-publish:
     docker:
-      - image: 'circleci/ruby:2.4.1'
+      - image: circleci/ruby:2.4.1
     steps:
-      - colony/start-sandbox:
-          artifacts: "{}"
-          blueprint: 'wordpress_aws_sample_Tokyo'
-          inputs: "{'DB_USER': 'root', 'DB_PASS': '1234', 'DB_NAME': 'wordpress_demo', 'AWS_Type': 't2.micro'}"
-          sandbox-name: 'demo-sandbox'
+      - checkout
       - run:
-          command: 'echo "Sandbox ID is ${SANDBOX_ID}"'
-          name: Fetch Details
-      - colony/end-sandbox:
-          sandbox-id: SANDBOX_ID
+          command: |
+            mv wordpress-5.4.1.tar.gz wordpress-latest.tar.gz
+          name: Archive app
+      - aws-s3/copy:
+          from: wordpress-latest.tar.gz
+          to: "s3://colony-repository/"
 orbs:
-  colony: quali/cloudshell-colony@1
+  aws-s3: circleci/aws-s3@1.0.11
+  colony: quali/cloudshell-colony@1.0.4
 version: 2.1
 workflows:
-  easy:
+  leadeasy:
     jobs:
-      - build
+      - build-and-publish
+      - colony/sandbox:
+          artifacts: "{'wordpress':'wordpress-latest.tar.gz'}"
+          blueprint: wordpress_aws_sample_Tokyo_for_Artifact
+          inputs: "{'DB_USER': 'root', 'DB_PASS': '1234', 'DB_NAME': 'wordpress_demo', 'AWS_Type': 't2.micro'}"
+          name: Deploy Application
+          requires:
+            - build-and-publish
+          sandbox-name: "wordpress-demo"
+          steps:
+            - run: echo "Do some testing here"
+            - run:
+                command: >
+                  echo "Getting application endpoint"
+
+                  SB_ENDPOINT="SB_${SANDBOX_ID}_SHORTCUT_1"
+
+                  echo "Checking ${!SB_ENDPOINT}"
+
+                  curl --write-out "%{http_code}\n" --silent --output /dev/null
+                  "${!SB_ENDPOINT}"
