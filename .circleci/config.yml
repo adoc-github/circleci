@@ -29,6 +29,7 @@ workflows:
           sandbox-name: "wordpress-demo"
           steps:
             - run: echo "Do some testing here"
+            - run: sleep 300
             - run:
                 command: >
                   echo "Getting application endpoint"
