@@ -6,7 +6,6 @@ jobs:
       - checkout
       - run:
           command: |
-            cp -ar ./* wordpress/
             mkdir -p build_artifact
             tar -zcvf  ./build_artifact/wordpress-latest.tar.gz ./wordpress/*
           name: Archive app
@@ -21,3 +20,24 @@ workflows:
   leadeasy:
     jobs:
       - build-and-publish
+      - colony/sandbox:
+          artifacts: "{'wordpress':'wordpress-latest.tar.gz'}"
+          blueprint: wordpress_aws_sample_Tokyo_for_Artifact
+          inputs: "{'DB_USER': 'root', 'DB_PASS': '1234', 'DB_NAME': 'wordpress_demo', 'AWS_Type': 't2.micro'}"
+          name: Deploy Application
+          requires:
+            - build-and-publish
+          sandbox-name: "wordpress-demo"
+          steps:
+            - run: echo "Do some testing here"
+            - run: sleep 300
+            - run:
+                command: >
+                  echo "Getting application endpoint"
+
+                  SB_ENDPOINT="SB_${SANDBOX_ID}_SHORTCUT_1"
+
+                  echo "Checking ${!SB_ENDPOINT}"
+
+                  curl --write-out "%{http_code}\n" --silent --output /dev/null
+                  "${!SB_ENDPOINT}"
