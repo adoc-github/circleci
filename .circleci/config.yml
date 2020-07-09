@@ -7,7 +7,7 @@ jobs:
       - run:
           command: |
             mkdir -p build_artifact
-            tar -zcvf  ./build_artifact/wordpress-latest.tar.gz ./src/*
+            tar -zcvf  ./build_artifact/wordpress-latest.tar.gz -C ./src .
           name: Archive app
       - aws-s3/copy:
           from: ./build_artifact/wordpress-latest.tar.gz
