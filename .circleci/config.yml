@@ -6,8 +6,7 @@ jobs:
       - checkout
       - run:
           command: |
-            mkdir -p wordpress
-            cp -a ./* wordpress/
+            cp -ar ./* wordpress/
             mkdir -p build_artifact
             tar -zcvf  ./build_artifact/wordpress-latest.tar.gz ./wordpress/*
           name: Archive app
