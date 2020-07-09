@@ -6,10 +6,11 @@ jobs:
       - checkout
       - run:
           command: |
-            mv ./app/wordpress-5.4.1.tar.gz wordpress-latest.tar.gz
+            mkdir -p build_artifact
+            tar -zcf  ./build_artifact/wordpress-latest.tar.gz ./src/*
           name: Archive app
       - aws-s3/copy:
-          from: wordpress-latest.tar.gz
+          from: ./build_artifact/wordpress-latest.tar.gz
           to: "s3://colony-repository/"
 orbs:
   aws-s3: circleci/aws-s3@1.0.11
