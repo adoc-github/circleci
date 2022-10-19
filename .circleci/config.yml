@@ -2,6 +2,9 @@
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
+orbs:
+   torque: quali/torque@1.0.0
+
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
@@ -17,6 +20,20 @@ jobs:
       - run:
           name: "Say hello"
           command: "echo Hello, World!"
+  use-torque:
+    docker:
+      - image: circleci/ruby:2.4.1
+    steps:
+      - torque/start-sandbox:
+          # artifacts: '{''app-frontend'':''latest/my-app.latest.tar.gz''}'
+          blueprint: hello-world
+          inputs: '{''my_name'': ''John Doe'', ''host_name'': ''adoc-eks''}'
+          sandbox-name: hello-world-by-circleci
+      - run:
+          command: 'echo "Sandbox ID is ${SANDBOX_ID}"'
+          name: Fetch Details
+      - torque/end-sandbox:
+          sandbox-id: SANDBOX_ID
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -24,3 +41,4 @@ workflows:
   say-hello-workflow:
     jobs:
       - say-hello
+      - use-torque
