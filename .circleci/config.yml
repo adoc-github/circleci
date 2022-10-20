@@ -45,6 +45,3 @@ workflows:
     jobs:
       - say-hello
       - use-torque
-  test-workflow:
-    jobs:
-      - say-hello
