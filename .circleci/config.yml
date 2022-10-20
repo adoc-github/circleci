@@ -30,7 +30,7 @@ jobs:
           inputs: '{''my_name'': ''John Doe'', ''host_name'': ''adoc-eks''}'
           sandbox-name: hello-world-by-circleci
       - run:
-          command: 'sleep 180'
+          command: 'sleep 10'
           name: Active Sandbox
       - torque/end-sandbox:
           sandbox-id: SANDBOX_ID
@@ -40,5 +40,5 @@ jobs:
 workflows:
   say-hello-workflow:
     jobs:
-      - say-hello
+      # - say-hello
       - use-torque
