@@ -29,9 +29,9 @@ jobs:
           blueprint: hello-world
           inputs: '{''my_name'': ''John Doe'', ''host_name'': ''adoc-eks''}'
           sandbox-name: hello-world-by-circleci
-      # - run:
-      #     command: 'echo "Sandbox ID is ${SANDBOX_ID}"'
-      #     name: Fetch Details
+      - run:
+          command: 'sleep 180'
+          name: Active Sandbox
       - torque/end-sandbox:
           sandbox-id: SANDBOX_ID
 
