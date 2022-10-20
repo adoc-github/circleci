@@ -20,6 +20,9 @@ jobs:
       - run:
           name: "Say hello"
           command: "echo Hello, World!"
+      - run:
+          name: "Sleep"
+          command: "sleep 60"
   use-torque:
     docker:
       - image: circleci/ruby:2.4.1
@@ -30,7 +33,7 @@ jobs:
           inputs: '{''my_name'': ''John Doe'', ''host_name'': ''adoc-eks''}'
           sandbox-name: hello-world-by-circleci
       - run:
-          command: 'sleep 10'
+          command: 'sleep 120'
           name: Active Sandbox
       - torque/end-sandbox:
           sandbox-id: SANDBOX_ID
@@ -40,5 +43,5 @@ jobs:
 workflows:
   say-hello-workflow:
     jobs:
-      # - say-hello
+      - say-hello
       - use-torque
